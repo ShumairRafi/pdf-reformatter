@@ -1,6 +1,8 @@
 streamlit
 pandas
 numpy
-rapidfuzz
-openpyxl
 fpdf
+reportlab
+tempfile
+zipfile
+os
