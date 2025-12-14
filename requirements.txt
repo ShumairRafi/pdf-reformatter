@@ -1,8 +1,1 @@
-streamlit
-pandas
-numpy
-fpdf
-reportlab
-tempfile
-zipfile
-os
+pip install streamlit pandas reportlab
