@@ -51,146 +51,128 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 def create_pdf_profile(data):
-    """Create PDF document from applicant data"""
     buffer = io.BytesIO()
-    
-    # Create PDF document
+
     doc = SimpleDocTemplate(
         buffer,
         pagesize=A4,
-        rightMargin=30,
-        leftMargin=30,
-        topMargin=30,
-        bottomMargin=30
+        rightMargin=25,
+        leftMargin=25,
+        topMargin=25,
+        bottomMargin=25
     )
-    
-    # Get styles
+
     styles = getSampleStyleSheet()
-    
-    # Custom styles
+
+    # Header styles
     header_style = ParagraphStyle(
-        'HeaderStyle',
-        parent=styles['Heading1'],
-        fontSize=16,
+        "header",
+        fontSize=9,
         alignment=TA_CENTER,
-        spaceAfter=6
+        spaceAfter=4
     )
-    
+
     title_style = ParagraphStyle(
-        'TitleStyle',
-        parent=styles['Heading2'],
+        "title",
         fontSize=14,
         alignment=TA_CENTER,
-        textColor=colors.HexColor('#2c3e50'),
-        spaceAfter=12
+        textColor=colors.HexColor("#0a7a3b"),
+        spaceAfter=12,
+        fontName="Helvetica-Bold"
     )
-    
+
     label_style = ParagraphStyle(
-        'LabelStyle',
-        parent=styles['Normal'],
-        fontSize=10,
-        textColor=colors.HexColor('#555555'),
-        spaceAfter=2
-    )
-    
-    value_style = ParagraphStyle(
-        'ValueStyle',
-        parent=styles['Normal'],
-        fontSize=11,
+        "label",
+        fontSize=9,
+        fontName="Helvetica-Bold",
         textColor=colors.black,
-        spaceAfter=8,
-        leftIndent=10
+        leftIndent=4
     )
-    
-    section_style = ParagraphStyle(
-        'SectionStyle',
-        parent=styles['Heading3'],
-        fontSize=12,
-        textColor=colors.HexColor('#2c3e50'),
-        spaceBefore=12,
-        spaceAfter=6,
-        underline=True
+
+    value_style = ParagraphStyle(
+        "value",
+        fontSize=9,
+        fontName="Helvetica",
+        leftIndent=4
     )
-    
-    # Content list
+
     content = []
-    
-    # Header with contact info
-    header_text = "No.37,32nd Lane Colombo 06. Tel:+94112361793 / +94777365964"
-    content.append(Paragraph(header_text, header_style))
-    
-    reg_text = "Reg.No.R/2552/C/238 (MRCA)"
-    content.append(Paragraph(reg_text, header_style))
-    
-    content.append(Spacer(1, 15))
-    
+
+    # Header
+    content.append(Paragraph(
+        "No. 37, 32nd Lane Colombo 06. &nbsp;&nbsp; Tel: +94 11 236 1793 / +94 77 736 5964",
+        header_style
+    ))
+    content.append(Paragraph("Reg. No R/2552/C/238 (MRCA)", header_style))
+    content.append(Spacer(1, 10))
+
     # Title
-    title_text = "New Admission Applicant Profile"
-    content.append(Paragraph(title_text, title_style))
-    
-    content.append(Spacer(1, 20))
-    
-    # Create table data for applicant information
-    table_data = []
-    
-    # Personal Information
-    personal_info = [
-        ["<b>Full Name</b>", data.get('full_name', '')],
-        ["<b>Address</b>", data.get('address', '')],
-        ["<b>Mobile (WhatsApp)</b>", data.get('whatsapp_mobile', '')],
-        ["<b>Mobile</b>", data.get('mobile', '')],
-        ["<b>Date of Birth</b>", data.get('dob', '')],
-        ["<b>Place of Birth</b>", data.get('place_of_birth', '')],
-        ["<b>NIC No</b>", data.get('nic', 'Not provided')],
-        ["<b>Languages Spoken</b>", data.get('languages', '')],
-        ["<b>School/College Attended</b>", data.get('school_attended', '')],
-        ["<b>Last Institute Attended</b>", data.get('last_institute', '')],
-        ["<b>Medium of Instruction</b>", data.get('medium', '')],
-        ["<b>Last Standard Acquired</b>", data.get('last_standard', '')],
-        ["<b>Year & Month Last Attended</b>", data.get('last_attended', '')],
-        ["<b>Completed Memorizing Quran?</b>", data.get('quran_memorized', 'No')],
+    content.append(Paragraph("New Admission Applicant Profile", title_style))
+
+    # Table data (ORDER MATCHES ORIGINAL)
+    rows = [
+        ("Full Name", data["full_name"]),
+        ("Address", data["address"]),
+        ("Mobile (WhatsApp)", data["whatsapp_mobile"]),
+        ("Mobile", data["mobile"]),
+        ("Date of Birth", data["dob"]),
+        ("Place of Birth", data["place_of_birth"]),
+        ("NIC No", data.get("nic") or "-"),
+        ("Languages Spoken", data["languages"]),
+        ("School/College Attended", data["school_attended"]),
+        ("Last Institute Attended", data["last_institute"]),
+        ("Medium of Instruction", data["medium"]),
+        ("Last Standard Acquired", data["last_standard"]),
+        ("Year & Month Last Attended", data["last_attended"]),
+        ("Completed Memorizing Quran?", data["quran_memorized"]),
+        ("If Yes, How Many Juz?", data.get("juz_count") or "-"),
+        ("Islamic Institute Last Attended", data["islamic_institute"]),
+        ("City/Location", data["city_location"]),
+        ("Duration Attended", data["duration"]),
+        ("Reason for Leaving", data["reason_leaving"]),
+        ("Parent/Guardian Full Name", data["parent_name"]),
+        ("Parent/Guardian Address", data["parent_address"]),
+        ("Father Residing", data["father_residing"]),
+        ("Occupation", data["occupation"]),
+        ("Parent/Guardian Mobile No.", data["parent_mobile"]),
+        ("WhatsApp No.", data["parent_whatsapp"]),
+        ("Language(s) Spoken at Home", data["home_languages"]),
     ]
-    
-    if data.get('quran_memorized', '').lower() == 'yes':
-        personal_info.append(["<b>If Yes, How Many Juz?</b>", data.get('juz_count', '')])
-    
-    personal_info.extend([
-        ["<b>Islamic Institute Last Attended</b>", data.get('islamic_institute', '')],
-        ["<b>City/Location</b>", data.get('city_location', '')],
-        ["<b>Duration Attended</b>", data.get('duration', '')],
-        ["<b>Reason for Leaving</b>", data.get('reason_leaving', '')],
-        ["<b>Parent/Guardian Full Name</b>", data.get('parent_name', '')],
-        ["<b>Parent/Guardian Address</b>", data.get('parent_address', '')],
-        ["<b>Father Residing</b>", data.get('father_residing', '')],
-        ["<b>Occupation</b>", data.get('occupation', '')],
-        ["<b>Parent/Guardian Mobile No.</b>", data.get('parent_mobile', '')],
-        ["<b>WhatsApp No.</b>", data.get('parent_whatsapp', '')],
-        ["<b>Language(s) spoken at home</b>", data.get('home_languages', '')],
-    ])
-    
-    # Convert to Paragraph objects for proper formatting
-    for label, value in personal_info:
-        table_data.append([Paragraph(label, label_style), Paragraph(value, value_style)])
-    
-    # Create table
-    table = Table(table_data, colWidths=[2.5*inch, 4*inch])
-    
-    # Style the table
+
+    table_data = [
+        [Paragraph(label, label_style), Paragraph(value, value_style)]
+        for label, value in rows
+    ]
+
+    table = Table(
+        table_data,
+        colWidths=[2.7 * inch, 3.8 * inch],
+        rowHeights=[18] * len(table_data)
+    )
+
     table.setStyle(TableStyle([
-        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('ALIGN', (0, 0), (0, -1), 'LEFT'),
-        ('ALIGN', (1, 0), (1, -1), 'LEFT'),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-        ('TOPPADDING', (0, 0), (-1, -1), 4),
+        # Grid
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+
+        # Background for label column
+        ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#e9f5ea")),
+
+        # Alignment
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+
+        # Padding
+        ("LEFTPADDING", (0, 0), (-1, -1), 6),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+        ("TOPPADDING", (0, 0), (-1, -1), 2),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
     ]))
-    
+
     content.append(table)
+
     content.append(Spacer(1, 20))
-    
-    # Build PDF
+    content.append(Paragraph("<b>Additional Notes:</b>", styles["Normal"]))
+
     doc.build(content)
-    
-    # Get PDF bytes
     buffer.seek(0)
     return buffer.getvalue()
 
