@@ -457,11 +457,7 @@ if submitted or any(st.session_state.get(field, '') for field in ['full_name', '
             st.markdown("---")
             
             # Validation status
-            required_fields = ['full_name', 'address', 'whatsapp_mobile', 'mobile', 'dob', 
-                             'place_of_birth', 'languages', 'school_attended', 'last_institute',
-                             'medium', 'last_standard', 'last_attended', 'parent_name',
-                             'parent_address', 'occupation', 'parent_mobile', 'parent_whatsapp',
-                             'home_languages']
+            required_fields = ['full_name', 'address', 'mobile', 'dob', 'parent_name', 'parent_mobile']
             
             missing_fields = [field for field in required_fields if not st.session_state.get(field, '')]
             
