@@ -2,15 +2,13 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 import io
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import letter, A4
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch, mm
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 from reportlab.lib import colors
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
 import base64
 
 # Set page config
@@ -52,166 +50,8 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-def create_pdf_profile_exact_format(data):
-    """Create PDF document exactly like the original PDF format"""
-    buffer = io.BytesIO()
-    
-    # Create PDF with A4 size
-    c = canvas.Canvas(buffer, pagesize=A4)
-    width, height = A4
-    
-    # Set font - using standard Helvetica for exact match
-    c.setFont("Helvetica", 10)
-    
-    # Header section (top of page)
-    # First line: Address and phone
-    c.setFont("Helvetica-Bold", 11)
-    c.drawString(30, height - 40, "No.37,32nd Lane Colombo 06. Tel:+94112361793 / +94777365964")
-    
-    # Second line: Registration number
-    c.setFont("Helvetica-Bold", 11)
-    c.drawString(30, height - 55, "Reg.No.R/2552/C/238 (MRCA)")
-    
-    # Title
-    c.setFont("Helvetica-Bold", 14)
-    c.drawString(width/2 - 100, height - 85, "New Admission Applicant Profile")
-    
-    # Draw a line under the title
-    c.line(30, height - 95, width - 30, height - 95)
-    
-    # Starting position for content
-    y_position = height - 120
-    
-    # Define field labels exactly as in the PDF
-    field_labels = [
-        "Full Name",
-        "Address",
-        "Mobile (WhatsApp)",
-        "Mobile",
-        "Date of Birth",
-        "Place of Birth",
-        "NIC No",
-        "Languages Spoken",
-        "School/College Attended",
-        "Last Institute Attended",
-        "Medium of Instruction",
-        "Last Standard Acquired",
-        "Year & Month Last Attended",
-        "Completed Memorizing Quran?",
-        "If Yes,How Many Juz?",
-        "Islamic Institute Last Attended",
-        "City/Location",
-        "Duration Attended",
-        "Reason for Leaving",
-        "Parent/Guardian Full Name",
-        "Parent/Guardian Address",
-        "Father Residing",
-        "Occupation",
-        "Parent/Guardian Mobile No.",
-        "WhatsApp No.",
-        "Language(s)Spoken at Home"
-    ]
-    
-    # Define data fields mapping
-    data_mapping = {
-        "Full Name": data.get('full_name', ''),
-        "Address": data.get('address', ''),
-        "Mobile (WhatsApp)": data.get('whatsapp_mobile', ''),
-        "Mobile": data.get('mobile', ''),
-        "Date of Birth": data.get('dob', ''),
-        "Place of Birth": data.get('place_of_birth', ''),
-        "NIC No": data.get('nic', ''),
-        "Languages Spoken": data.get('languages', ''),
-        "School/College Attended": data.get('school_attended', ''),
-        "Last Institute Attended": data.get('last_institute', ''),
-        "Medium of Instruction": data.get('medium', ''),
-        "Last Standard Acquired": data.get('last_standard', ''),
-        "Year & Month Last Attended": data.get('last_attended', ''),
-        "Completed Memorizing Quran?": data.get('quran_memorized', 'No'),
-        "If Yes,How Many Juz?": data.get('juz_count', '') if data.get('quran_memorized', '').lower() == 'yes' else '',
-        "Islamic Institute Last Attended": data.get('islamic_institute', ''),
-        "City/Location": data.get('city_location', ''),
-        "Duration Attended": data.get('duration', ''),
-        "Reason for Leaving": data.get('reason_leaving', ''),
-        "Parent/Guardian Full Name": data.get('parent_name', ''),
-        "Parent/Guardian Address": data.get('parent_address', ''),
-        "Father Residing": data.get('father_residing', ''),
-        "Occupation": data.get('occupation', ''),
-        "Parent/Guardian Mobile No.": data.get('parent_mobile', ''),
-        "WhatsApp No.": data.get('parent_whatsapp', ''),
-        "Language(s)Spoken at Home": data.get('home_languages', '')
-    }
-    
-    # Draw each field and value
-    c.setFont("Helvetica", 11)
-    
-    for i, label in enumerate(field_labels):
-        # Skip "If Yes,How Many Juz?" if Quran is not memorized
-        if label == "If Yes,How Many Juz?" and data.get('quran_memorized', '').lower() != 'yes':
-            continue
-            
-        # Check if we need a new page
-        if y_position < 100:
-            c.showPage()
-            # Reset font and position for new page
-            c.setFont("Helvetica", 11)
-            y_position = height - 40
-            
-        # Draw label
-        c.setFont("Helvetica", 11)
-        c.drawString(30, y_position, label)
-        
-        # Draw value (if exists)
-        value = data_mapping.get(label, '')
-        if value:
-            c.setFont("Helvetica", 11)
-            # Wrap text if too long
-            max_width = width - 60
-            value_lines = []
-            words = str(value).split()
-            current_line = []
-            
-            for word in words:
-                current_line.append(word)
-                test_line = ' '.join(current_line)
-                if c.stringWidth(test_line, "Helvetica", 11) > max_width:
-                    if len(current_line) > 1:
-                        value_lines.append(' '.join(current_line[:-1]))
-                        current_line = [word]
-                    else:
-                        value_lines.append(word)
-                        current_line = []
-            
-            if current_line:
-                value_lines.append(' '.join(current_line))
-            
-            # Draw each line of the value
-            for line_num, line in enumerate(value_lines):
-                c.drawString(30, y_position - (15 * (line_num + 1)), line)
-            
-            # Adjust y_position based on number of lines
-            y_position -= (15 * (len(value_lines) + 1))
-        else:
-            # Empty line if no value
-            y_position -= 30
-        
-        # Add some space between fields
-        y_position -= 5
-    
-    # Draw "Additional Notes:" at the bottom if space
-    if y_position > 100:
-        c.setFont("Helvetica", 11)
-        c.drawString(30, y_position, "Additional Notes:")
-    
-    # Save the PDF
-    c.save()
-    
-    # Get PDF bytes
-    buffer.seek(0)
-    return buffer.getvalue()
-
 def create_pdf_profile(data):
-    """Alternative PDF creation with table format"""
+    """Create PDF document from applicant data"""
     buffer = io.BytesIO()
     
     # Create PDF document
@@ -227,53 +67,62 @@ def create_pdf_profile(data):
     # Get styles
     styles = getSampleStyleSheet()
     
-    # Custom styles matching original PDF
+    # Custom styles
     header_style = ParagraphStyle(
         'HeaderStyle',
-        parent=styles['Normal'],
-        fontName='Helvetica-Bold',
-        fontSize=11,
-        alignment=TA_LEFT,
+        parent=styles['Heading1'],
+        fontSize=16,
+        alignment=TA_CENTER,
         spaceAfter=6
     )
     
     title_style = ParagraphStyle(
         'TitleStyle',
-        parent=styles['Normal'],
-        fontName='Helvetica-Bold',
+        parent=styles['Heading2'],
         fontSize=14,
         alignment=TA_CENTER,
+        textColor=colors.HexColor('#2c3e50'),
         spaceAfter=12
     )
     
     label_style = ParagraphStyle(
         'LabelStyle',
         parent=styles['Normal'],
-        fontName='Helvetica',
-        fontSize=11,
+        fontSize=10,
+        textColor=colors.HexColor('#555555'),
         spaceAfter=2
     )
     
     value_style = ParagraphStyle(
         'ValueStyle',
         parent=styles['Normal'],
-        fontName='Helvetica',
         fontSize=11,
+        textColor=colors.black,
         spaceAfter=8,
-        leftIndent=0
+        leftIndent=10
+    )
+    
+    section_style = ParagraphStyle(
+        'SectionStyle',
+        parent=styles['Heading3'],
+        fontSize=12,
+        textColor=colors.HexColor('#2c3e50'),
+        spaceBefore=12,
+        spaceAfter=6,
+        underline=True
     )
     
     # Content list
     content = []
     
-    # Header with contact info (exactly like PDF)
+    # Header with contact info
     header_text = "No.37,32nd Lane Colombo 06. Tel:+94112361793 / +94777365964"
     content.append(Paragraph(header_text, header_style))
     
     reg_text = "Reg.No.R/2552/C/238 (MRCA)"
     content.append(Paragraph(reg_text, header_style))
     
-    content.append(Spacer(1, 10))
+    content.append(Spacer(1, 15))
     
     # Title
     title_text = "New Admission Applicant Profile"
@@ -281,57 +130,62 @@ def create_pdf_profile(data):
     
     content.append(Spacer(1, 20))
     
-    # Prepare data in exact PDF format
-    field_data = [
-        ("Full Name", data.get('full_name', '')),
-        ("Address", data.get('address', '')),
-        ("Mobile (WhatsApp)", data.get('whatsapp_mobile', '')),
-        ("Mobile", data.get('mobile', '')),
-        ("Date of Birth", data.get('dob', '')),
-        ("Place of Birth", data.get('place_of_birth', '')),
-        ("NIC No", data.get('nic', '')),
-        ("Languages Spoken", data.get('languages', '')),
-        ("School/College Attended", data.get('school_attended', '')),
-        ("Last Institute Attended", data.get('last_institute', '')),
-        ("Medium of Instruction", data.get('medium', '')),
-        ("Last Standard Acquired", data.get('last_standard', '')),
-        ("Year & Month Last Attended", data.get('last_attended', '')),
-        ("Completed Memorizing Quran?", data.get('quran_memorized', 'No')),
+    # Create table data for applicant information
+    table_data = []
+    
+    # Personal Information
+    personal_info = [
+        ["<b>Full Name</b>", data.get('full_name', '')],
+        ["<b>Address</b>", data.get('address', '')],
+        ["<b>Mobile (WhatsApp)</b>", data.get('whatsapp_mobile', '')],
+        ["<b>Mobile</b>", data.get('mobile', '')],
+        ["<b>Date of Birth</b>", data.get('dob', '')],
+        ["<b>Place of Birth</b>", data.get('place_of_birth', '')],
+        ["<b>NIC No</b>", data.get('nic', 'Not provided')],
+        ["<b>Languages Spoken</b>", data.get('languages', '')],
+        ["<b>School/College Attended</b>", data.get('school_attended', '')],
+        ["<b>Last Institute Attended</b>", data.get('last_institute', '')],
+        ["<b>Medium of Instruction</b>", data.get('medium', '')],
+        ["<b>Last Standard Acquired</b>", data.get('last_standard', '')],
+        ["<b>Year & Month Last Attended</b>", data.get('last_attended', '')],
+        ["<b>Completed Memorizing Quran?</b>", data.get('quran_memorized', 'No')],
     ]
     
     if data.get('quran_memorized', '').lower() == 'yes':
-        field_data.append(("If Yes,How Many Juz?", data.get('juz_count', '')))
+        personal_info.append(["<b>If Yes, How Many Juz?</b>", data.get('juz_count', '')])
     
-    field_data.extend([
-        ("Islamic Institute Last Attended", data.get('islamic_institute', '')),
-        ("City/Location", data.get('city_location', '')),
-        ("Duration Attended", data.get('duration', '')),
-        ("Reason for Leaving", data.get('reason_leaving', '')),
-        ("Parent/Guardian Full Name", data.get('parent_name', '')),
-        ("Parent/Guardian Address", data.get('parent_address', '')),
-        ("Father Residing", data.get('father_residing', '')),
-        ("Occupation", data.get('occupation', '')),
-        ("Parent/Guardian Mobile No.", data.get('parent_mobile', '')),
-        ("WhatsApp No.", data.get('parent_whatsapp', '')),
-        ("Language(s)Spoken at Home", data.get('home_languages', '')),
+    personal_info.extend([
+        ["<b>Islamic Institute Last Attended</b>", data.get('islamic_institute', '')],
+        ["<b>City/Location</b>", data.get('city_location', '')],
+        ["<b>Duration Attended</b>", data.get('duration', '')],
+        ["<b>Reason for Leaving</b>", data.get('reason_leaving', '')],
+        ["<b>Parent/Guardian Full Name</b>", data.get('parent_name', '')],
+        ["<b>Parent/Guardian Address</b>", data.get('parent_address', '')],
+        ["<b>Father Residing</b>", data.get('father_residing', '')],
+        ["<b>Occupation</b>", data.get('occupation', '')],
+        ["<b>Parent/Guardian Mobile No.</b>", data.get('parent_mobile', '')],
+        ["<b>WhatsApp No.</b>", data.get('parent_whatsapp', '')],
+        ["<b>Language(s) spoken at home</b>", data.get('home_languages', '')],
     ])
     
-    # Create content with label and value on separate lines
-    for label, value in field_data:
-        # Skip empty Juz field if Quran not memorized
-        if label == "If Yes,How Many Juz?" and not value:
-            continue
-            
-        content.append(Paragraph(label, label_style))
-        if value:
-            content.append(Paragraph(value, value_style))
-        else:
-            content.append(Paragraph(" ", value_style))  # Empty line
-        content.append(Spacer(1, 5))
+    # Convert to Paragraph objects for proper formatting
+    for label, value in personal_info:
+        table_data.append([Paragraph(label, label_style), Paragraph(value, value_style)])
     
-    # Add Additional Notes at the end
-    content.append(Spacer(1, 10))
-    content.append(Paragraph("Additional Notes:", label_style))
+    # Create table
+    table = Table(table_data, colWidths=[2.5*inch, 4*inch])
+    
+    # Style the table
+    table.setStyle(TableStyle([
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+        ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+        ('ALIGN', (1, 0), (1, -1), 'LEFT'),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+        ('TOPPADDING', (0, 0), (-1, -1), 4),
+    ]))
+    
+    content.append(table)
+    content.append(Spacer(1, 20))
     
     # Build PDF
     doc.build(content)
@@ -339,6 +193,12 @@ def create_pdf_profile(data):
     # Get PDF bytes
     buffer.seek(0)
     return buffer.getvalue()
+
+def get_download_link(pdf_bytes, filename):
+    """Generate a download link for the PDF"""
+    b64 = base64.b64encode(pdf_bytes).decode()
+    href = f'<a href="data:application/pdf;base64,{b64}" download="{filename}" style="display: inline-block; padding: 0.5rem 1rem; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px; border: none; cursor: pointer; text-align: center;">📥 Download PDF</a>'
+    return href
 
 # Title
 st.title("📄 CIT Applicant Profile Generator")
@@ -648,8 +508,8 @@ if submitted or any(st.session_state.get(field, '') for field in ['full_name', '
                      'home_languages']:
             pdf_data[field] = st.session_state.get(field, '')
         
-        # Generate PDF using exact format function
-        pdf_bytes = create_pdf_profile_exact_format(pdf_data)
+        # Generate PDF
+        pdf_bytes = create_pdf_profile(pdf_data)
         
         # Create download buttons
         col_dl1, col_dl2, col_dl3 = st.columns(3)
@@ -661,27 +521,14 @@ if submitted or any(st.session_state.get(field, '') for field in ['full_name', '
             
             # Use Streamlit's download button
             st.download_button(
-                label="📥 Download as PDF (Exact Format)",
+                label="📥 Download as PDF",
                 data=pdf_bytes,
                 file_name=filename,
                 mime="application/pdf",
-                use_container_width=True,
-                help="Downloads PDF in exact format matching the original template"
+                use_container_width=True
             )
         
         with col_dl2:
-            # Generate alternative PDF format
-            alt_pdf_bytes = create_pdf_profile(pdf_data)
-            st.download_button(
-                label="📥 Download as PDF (Table Format)",
-                data=alt_pdf_bytes,
-                file_name=f"CIT_Application_Table_{name_part}.pdf",
-                mime="application/pdf",
-                use_container_width=True,
-                help="Downloads PDF with table formatting"
-            )
-        
-        with col_dl3:
             # Create formatted text for copying
             profile_text = f"""CIT APPLICANT PROFILE
 =============================
@@ -733,12 +580,12 @@ Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                 use_container_width=True
             )
         
-        # Clear form button
-        if st.button("🔄 Clear Form", use_container_width=True):
-            for key in list(st.session_state.keys()):
-                if key not in ['_']:  # Don't clear internal streamlit keys
-                    st.session_state[key] = ""
-            st.rerun()
+        with col_dl3:
+            if st.button("🔄 Clear Form", use_container_width=True):
+                for key in list(st.session_state.keys()):
+                    if key not in ['_']:  # Don't clear internal streamlit keys
+                        st.session_state[key] = ""
+                st.rerun()
     else:
         st.warning("Please fill all required fields (marked with *) before downloading PDF")
 
