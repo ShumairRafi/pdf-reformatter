@@ -215,33 +215,44 @@ with st.sidebar:
                         # Map to our form fields
                         data = {
                             'timestamp': fields[0],
+                        
+                            # Applicant
                             'full_name': fields[1],
-                            'address': fields[2],
-                            'whatsapp_mobile': fields[3],
-                            'mobile': fields[4],
-                            'dob': fields[5],
-                            'place_of_birth': fields[6],
-                            'nic': fields[7],
-                            'languages': fields[8],
-                            'school_attended': fields[9],
-                            'last_institute': fields[10],
-                            'medium': fields[11],
-                            'last_standard': fields[12],
-                            'last_attended': fields[13],
-                            'quran_memorized': fields[14],
-                            'juz_count': fields[15],
-                            'islamic_institute': fields[16],
-                            'city_location': fields[17],
-                            'duration': fields[18],
-                            'reason_leaving': fields[19],
-                            'parent_name': fields[20],
-                            'parent_address': fields[21],
-                            'father_residing': fields[22],
-                            'occupation': fields[23],
-                            'parent_mobile': fields[24],
-                            'parent_whatsapp': fields[25],
-                            'home_languages': fields[26] if len(fields) > 26 else fields[25]
+                            'whatsapp_mobile': fields[6],     # Mobile (Whatsapp)
+                            'mobile': fields[7],              # Mobile
+                            'address': fields[5],
+                            'dob': fields[8],
+                            'place_of_birth': fields[9],
+                            'nic': fields[10],
+                        
+                            # Education
+                            'languages': fields[11],
+                            'school_attended': fields[12],
+                            'last_institute': fields[13],
+                            'medium': fields[14],
+                            'last_standard': fields[15],
+                            'last_attended': fields[16],
+                        
+                            # Quran
+                            'quran_memorized': fields[17],
+                            'juz_count': fields[18],
+                        
+                            # Islamic education
+                            'islamic_institute': fields[19],
+                            'city_location': fields[20],
+                            'duration': fields[21],
+                            'reason_leaving': fields[22],
+                        
+                            # Parent / Guardian
+                            'parent_name': fields[23],
+                            'parent_address': fields[24],
+                            'father_residing': fields[25],
+                            'occupation': fields[26],
+                            'parent_mobile': fields[27],
+                            'parent_whatsapp': fields[28],
+                            'home_languages': fields[29]
                         }
+
                         
                         # Store in session state
                         for key, value in data.items():
