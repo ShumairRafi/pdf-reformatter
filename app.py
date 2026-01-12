@@ -149,7 +149,7 @@ def create_pdf_profile(data):
         "New Admission Applicant Profile",
         ParagraphStyle(
             "green_title",
-            fontSize=14,
+            fontSize=16,
             alignment=TA_CENTER,
             fontName="Helvetica-Bold",
             textColor=colors.HexColor("#0a7a3b"),
