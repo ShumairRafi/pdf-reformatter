@@ -121,7 +121,7 @@ def create_pdf_profile(data):
             fontSize=12,
             fontName="Helvetica",
             leading=14,
-            spaceBefore=15
+            spaceBefore=30
         )
     )
     
