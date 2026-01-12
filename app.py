@@ -153,7 +153,7 @@ def create_pdf_profile(data):
             alignment=TA_CENTER,
             fontName="Helvetica-Bold",
             textColor=colors.HexColor("#0a7a3b"),
-            spaceAfter=18
+            spaceAfter=25
         )
     ))
 
