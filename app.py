@@ -51,6 +51,16 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 def create_pdf_profile(data):
+    import io
+    from reportlab.platypus import (
+        SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
+    )
+    from reportlab.lib.pagesizes import A4
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.enums import TA_CENTER
+    from reportlab.lib.units import inch
+    from reportlab.lib import colors
+
     buffer = io.BytesIO()
 
     doc = SimpleDocTemplate(
@@ -76,36 +86,46 @@ def create_pdf_profile(data):
         fontSize=14,
         alignment=TA_CENTER,
         textColor=colors.HexColor("#0a7a3b"),
-        spaceAfter=12,
+        spaceAfter=10,
         fontName="Helvetica-Bold"
     )
 
-label_style = ParagraphStyle(
-    "label",
-    fontSize=9,
-    fontName="Helvetica-Bold",
-    leading=11
-)
+    label_style = ParagraphStyle(
+        "label",
+        fontSize=9,
+        fontName="Helvetica-Bold",
+        leading=11
+    )
 
-value_style = ParagraphStyle(
-    "value",
-    fontSize=9,
-    fontName="Helvetica",
-    leading=11,          # smaller line height
-    wordWrap="CJK"
-)
-
+    value_style = ParagraphStyle(
+        "value",
+        fontSize=9,
+        fontName="Helvetica",
+        leading=11,
+        wordWrap="CJK"
+    )
 
     content = []
 
+    # ---- HEADER (LOGO OPTIONAL) ----
+    try:
+        logo = Image("assets/logo.png", 40, 40)
+        logo.hAlign = "CENTER"
+        content.append(logo)
+        content.append(Spacer(1, 6))
+    except Exception:
+        pass
+
     content.append(Paragraph(
-        "No. 37, 32nd Lane Colombo 06.  Tel: +94 11 236 1793 / +94 77 736 5964",
+        "No. 37, 32nd Lane Colombo 06.<br/>"
+        "Tel: +94 11 236 1793 / +94 77 736 5964<br/>"
+        "Reg. No R/2552/C/238 (MRCA)",
         header_style
     ))
-    content.append(Paragraph("Reg. No R/2552/C/238 (MRCA)", header_style))
-    content.append(Spacer(1, 10))
 
+    content.append(Spacer(1, 8))
     content.append(Paragraph("New Admission Applicant Profile", title_style))
+    content.append(Spacer(1, 8))
 
     rows = [
         ("Full Name", data["full_name"]),
@@ -143,30 +163,27 @@ value_style = ParagraphStyle(
 
     table = Table(
         table_data,
-        colWidths=[2.7 * inch, 3.8 * inch]
+        colWidths=[2.6 * inch, 4.0 * inch]
     )
 
-table.setStyle(TableStyle([
-    ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-    ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#e9f5ea")),
-    ("VALIGN", (0, 0), (-1, -1), "TOP"),
-
-    # 🔽 compact padding
-    ("LEFTPADDING", (0, 0), (-1, -1), 4),
-    ("RIGHTPADDING", (0, 0), (-1, -1), 4),
-    ("TOPPADDING", (0, 0), (-1, -1), 3),
-    ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
-]))
+    table.setStyle(TableStyle([
+        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+        ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#e9f5ea")),
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 4),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 4),
+        ("TOPPADDING", (0, 0), (-1, -1), 3),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+    ]))
 
     content.append(table)
 
-    content.append(Spacer(1, 20))
+    content.append(Spacer(1, 14))
     content.append(Paragraph("<b>Additional Notes:</b>", styles["Normal"]))
 
     doc.build(content)
     buffer.seek(0)
     return buffer.getvalue()
-
 
 def get_download_link(pdf_bytes, filename):
     """Generate a download link for the PDF"""
