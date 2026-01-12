@@ -106,7 +106,7 @@ def create_pdf_profile(data):
     content = []
 
     # ---------- HEADER (LOGO LEFT, TEXT RIGHT) ----------
-    logo = Image("assets/logo.jpg", width=150, height=65)
+    logo = Image("assets/logo.jpg", width=165, height=70)
     
     right_header = Paragraph(
         """
