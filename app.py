@@ -113,61 +113,58 @@ def create_pdf_profile(data):
     # Title
     content.append(Paragraph("New Admission Applicant Profile", title_style))
 
-    # Table data (ORDER MATCHES ORIGINAL)
-    rows = [
-        ("Full Name", data["full_name"]),
-        ("Address", data["address"]),
-        ("Mobile (Whatsapp)", data["whatsapp_mobile"]),
-        ("Mobile", data["mobile"]),
-        ("Date of Birth", data["dob"]),
-        ("Place of Birth", data["place_of_birth"]),
-        ("N.I.C No", data.get("nic") or "-"),
-        ("Languages Spoken", data["languages"]),
-        ("Name of School/College attended", data["school_attended"]),
-        ("Name of Institute/College last attended", data["last_institute"]),
-        ("Medium of Instruction", data["medium"]),
-        ("Last standard acquired", data["last_standard"]),
-        ("Year and Last month attended", data["last_attended"]),
-        ("Have you completed memorizing the Quran?", data["quran_memorized"]),
-        ("If yes, how many Juzu’?", data.get("juz_count") or "-"),
-        ("Name of Islamic Institute last attended", data["islamic_institute"]),
-        ("City/ Location", data["city_location"]),
-        ("Duration attended", data["duration"]),
-        ("Reason for leaving/intending to leave", data["reason_leaving"]),
-        ("Parent/Guardian Full Name", data["parent_name"]),
-        ("Parent/Guardian Address", data["parent_address"]),
-        ("Father Residing (Inland/Overseas)", data["father_residing"]),
-        ("Occupation", data["occupation"]),
-        ("Parent/Guardian Mobile No.", data["parent_mobile"]),
-        ("WhatsApp No.", data["parent_whatsapp"]),
-        ("Language(s) spoken at home", data["home_languages"]),
-    ]
-
-    table_data = [
-        [Paragraph(label, label_style), Paragraph(value, value_style)]
-        for label, value in rows
-    ]
-
+        # Table data (OFFICIAL FORMAT – NO TIMESTAMP)
+            rows = [
+                ("Full Name", data["full_name"]),
+                ("Address", data["address"]),
+                ("Mobile (Whatsapp)", data["whatsapp_mobile"]),
+                ("Mobile", data["mobile"]),
+                ("Date of Birth", data["dob"]),
+                ("Place of Birth", data["place_of_birth"]),
+                ("N.I.C No", data.get("nic") or "-"),
+                ("Languages Spoken", data["languages"]),
+                ("Name of School/College attended", data["school_attended"]),
+                ("Name of Institute/College last attended", data["last_institute"]),
+                ("Medium of Instruction", data["medium"]),
+                ("Last standard acquired", data["last_standard"]),
+                ("Year and Last month attended", data["last_attended"]),
+                ("Have you completed memorizing the Quran?", data["quran_memorized"]),
+                ("If yes, how many Juzu’?", data.get("juz_count") or "-"),
+                ("Name of Islamic Institute last attended", data["islamic_institute"]),
+                ("City/ Location", data["city_location"]),
+                ("Duration attended", data["duration"]),
+                ("Reason for leaving/intending to leave", data["reason_leaving"]),
+                ("Parent/Guardian Full Name", data["parent_name"]),
+                ("Parent/Guardian Address", data["parent_address"]),
+                ("Father Residing (Inland/Overseas)", data["father_residing"]),
+                ("Occupation", data["occupation"]),
+                ("Parent/Guardian Mobile No.", data["parent_mobile"]),
+                ("WhatsApp No.", data["parent_whatsapp"]),
+                ("Language(s) spoken at home", data["home_languages"]),
+            ]
+        
+            table_data = [
+                [Paragraph(label, label_style), Paragraph(value, value_style)]
+                for label, value in rows
+            ]
+        
             table = Table(
                 table_data,
-                colWidths=[2.7 * inch, 3.8 * inch],
-                repeatRows=0  # optional but safe
+                colWidths=[2.7 * inch, 3.8 * inch]
             )
-
-
+        
             table.setStyle(TableStyle([
                 ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
                 ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#e9f5ea")),
                 ("VALIGN", (0, 0), (-1, -1), "TOP"),
-            
+        
                 ("LEFTPADDING", (0, 0), (-1, -1), 6),
                 ("RIGHTPADDING", (0, 0), (-1, -1), 6),
                 ("TOPPADDING", (0, 0), (-1, -1), 6),
                 ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
             ]))
-
-
-    content.append(table)
+        
+            content.append(table)
 
     content.append(Spacer(1, 20))
     content.append(Paragraph("<b>Additional Notes:</b>", styles["Normal"]))
