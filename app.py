@@ -137,7 +137,7 @@ def create_pdf_profile(data):
     ]))
     
     content.append(header_table)
-    content.append(Spacer(1, 14))
+    content.append(Spacer(1, 24))
 
         
         
