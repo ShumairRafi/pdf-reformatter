@@ -110,8 +110,7 @@ def create_pdf_profile(data):
     content.append(Paragraph("New Admission Applicant Profile", title_style))
 
     # Table data (ORDER MATCHES ORIGINAL)
-    rows = [
-    ("Timestamp", data.get("timestamp", "-")),
+rows = [
     ("Full Name", data["full_name"]),
     ("Address", data["address"]),
     ("Mobile (Whatsapp)", data["whatsapp_mobile"]),
