@@ -52,9 +52,7 @@ st.markdown("""
 
 def create_pdf_profile(data):
     import io
-    from reportlab.platypus import (
-        SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
-    )
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
     from reportlab.lib.pagesizes import A4
     from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
     from reportlab.lib.enums import TA_CENTER
@@ -107,15 +105,7 @@ def create_pdf_profile(data):
 
     content = []
 
-    # ---- HEADER (LOGO OPTIONAL) ----
-    try:
-        logo = Image("assets/logo.png", 40, 40)
-        logo.hAlign = "CENTER"
-        content.append(logo)
-        content.append(Spacer(1, 6))
-    except Exception:
-        pass
-
+    # Header text
     content.append(Paragraph(
         "No. 37, 32nd Lane Colombo 06.<br/>"
         "Tel: +94 11 236 1793 / +94 77 736 5964<br/>"
