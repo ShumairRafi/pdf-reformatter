@@ -120,8 +120,7 @@ def create_pdf_profile(data):
             "right_header",
             fontSize=12,
             fontName="Helvetica",
-            leading=14,
-            spaceBefore=30
+            leading=14
         )
     )
     
@@ -136,7 +135,11 @@ def create_pdf_profile(data):
         ("RIGHTPADDING", (0, 0), (-1, -1), 0),
         ("TOPPADDING", (0, 0), (-1, -1), 0),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    
+        # Add extra top padding ONLY to the right cell (column 1)
+        ("TOPPADDING", (1, 0), (1, 0), 15),  # <-- 15 points down
     ]))
+
     content.append(Spacer(1, 25))   # SPACE ABOVE LOGO
     
     content.append(header_table)
