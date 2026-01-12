@@ -120,7 +120,7 @@ def create_pdf_profile(data):
             "right_header",
             fontSize=11,
             leading=14,
-            fontName="Aptos-Display"
+            fontName="Aptos"
         )
     )
     
