@@ -90,11 +90,15 @@ def create_pdf_profile(data):
     )
 
     value_style = ParagraphStyle(
-        "value",
-        fontSize=9,
-        fontName="Helvetica",
-        leftIndent=4
+    "value",
+    fontSize=9,
+    fontName="Helvetica",
+    leftIndent=4,
+    spaceAfter=2,
+    leading=12,
+    wordWrap="CJK"  # ensures wrapping even for long strings
     )
+
 
     content = []
 
@@ -151,22 +155,17 @@ def create_pdf_profile(data):
             )
 
 
-    table.setStyle(TableStyle([
-        # Grid
-        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+            table.setStyle(TableStyle([
+                ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+                ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#e9f5ea")),
+                ("VALIGN", (0, 0), (-1, -1), "TOP"),
+            
+                ("LEFTPADDING", (0, 0), (-1, -1), 6),
+                ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+                ("TOPPADDING", (0, 0), (-1, -1), 6),
+                ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
+            ]))
 
-        # Background for label column
-        ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#e9f5ea")),
-
-        # Alignment
-        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-
-        # Padding
-        ("LEFTPADDING", (0, 0), (-1, -1), 6),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
-        ("TOPPADDING", (0, 0), (-1, -1), 2),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
-    ]))
 
     content.append(table)
 
