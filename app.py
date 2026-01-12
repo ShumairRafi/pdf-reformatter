@@ -145,18 +145,17 @@ def create_pdf_profile(data):
         colWidths=[2.7 * inch, 3.8 * inch]
     )
 
-    table.setStyle(TableStyle([
-        ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
-        ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#e9f5ea")),
-        ("VALIGN", (0, 0), (-1, -1), "TOP"),
-    
-        # 🔽 compact padding
-        ("LEFTPADDING", (0, 0), (-1, -1), 4),
-        ("RIGHTPADDING", (0, 0), (-1, -1), 4),
-        ("TOPPADDING", (0, 0), (-1, -1), 3),
-        ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
-    ]))
+table.setStyle(TableStyle([
+    ("GRID", (0, 0), (-1, -1), 0.5, colors.grey),
+    ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#e9f5ea")),
+    ("VALIGN", (0, 0), (-1, -1), "TOP"),
 
+    # 🔽 compact padding
+    ("LEFTPADDING", (0, 0), (-1, -1), 4),
+    ("RIGHTPADDING", (0, 0), (-1, -1), 4),
+    ("TOPPADDING", (0, 0), (-1, -1), 3),
+    ("BOTTOMPADDING", (0, 0), (-1, -1), 3),
+]))
 
     content.append(table)
 
