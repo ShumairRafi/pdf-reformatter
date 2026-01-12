@@ -119,7 +119,8 @@ def create_pdf_profile(data):
         ParagraphStyle(
             "right_header",
             fontSize=12,
-            leading=12
+            leading=12,
+            fontName="Helvetica"
         )
     )
     
