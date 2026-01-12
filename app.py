@@ -137,7 +137,7 @@ def create_pdf_profile(data):
     ]))
     
     content.append(header_table)
-    content.append(Spacer(1, 24))
+    content.append(Spacer(1, 40))
 
         
         
@@ -149,7 +149,7 @@ def create_pdf_profile(data):
             alignment=TA_CENTER,
             fontName="Helvetica-Bold",
             textColor=colors.HexColor("#0a7a3b"),
-            spaceAfter=12
+            spaceAfter=18
         )
     ))
 
