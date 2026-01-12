@@ -120,7 +120,8 @@ def create_pdf_profile(data):
             "right_header",
             fontSize=12,
             fontName="Helvetica",
-            leading=14
+            leading=14,
+            spaceBefore=15
         )
     )
     
