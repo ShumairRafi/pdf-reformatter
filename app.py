@@ -126,7 +126,7 @@ def create_pdf_profile(data):
     
     header_table = Table(
         [[logo, right_header]],
-        colWidths=[1.7 * inch, 4.8 * inch]
+        colWidths=[1.9 * inch, 4.8 * inch]
     )
     
     header_table.setStyle(TableStyle([
