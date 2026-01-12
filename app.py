@@ -137,7 +137,7 @@ rows = [
     ("Parent/Guardian Mobile No.", data["parent_mobile"]),
     ("WhatsApp No.", data["parent_whatsapp"]),
     ("Language(s) spoken at home", data["home_languages"]),
-]
+    ]
 
     table_data = [
         [Paragraph(label, label_style), Paragraph(value, value_style)]
