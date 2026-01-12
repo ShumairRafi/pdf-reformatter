@@ -106,61 +106,61 @@ def create_pdf_profile(data):
     content = []
 
     # Header text
-from reportlab.platypus import Image
-
-# --- LOGO ---
-logo = Image("/assets/logo.jpg", width=60, height=60)
-logo.hAlign = "CENTER"
-content.append(logo)
-
-content.append(Spacer(1, 6))
-
-# --- INSTITUTE NAME ---
-content.append(Paragraph(
-    "<b>COLOMBO INSTITUTE OF THEOLOGIANS</b>",
-    ParagraphStyle(
-        "inst_name",
-        fontSize=12,
-        alignment=TA_CENTER,
-        spaceAfter=4,
-        fontName="Helvetica-Bold"
-    )
-))
-
-# --- ADDRESS & CONTACT ---
-content.append(Paragraph(
-    "No. 37, 32nd Lane Colombo 06.<br/>"
-    "Tel: +94 11 236 1793 / +94 77 736 5964",
-    ParagraphStyle(
-        "contact",
-        fontSize=9,
-        alignment=TA_CENTER,
-        spaceAfter=4
-    )
-))
-
-# --- REGISTRATION NUMBER ---
-content.append(Paragraph(
-    "Reg. No R/2552/C/238 (MRCA)",
-    ParagraphStyle(
-        "reg",
-        fontSize=8,
-        alignment=TA_CENTER,
-        spaceAfter=10
-    )
-))
-
-# --- TITLE ---
-content.append(Paragraph(
-    "New Admission Applicant Profile",
-    ParagraphStyle(
-        "title",
-        fontSize=13,
-        alignment=TA_CENTER,
-        fontName="Helvetica-Bold",
-        spaceAfter=12
-    )
-))
+    from reportlab.platypus import Image
+    
+    # --- LOGO ---
+    logo = Image("/assets/logo.jpg", width=60, height=60)
+    logo.hAlign = "CENTER"
+    content.append(logo)
+    
+    content.append(Spacer(1, 6))
+    
+    # --- INSTITUTE NAME ---
+    content.append(Paragraph(
+        "<b>COLOMBO INSTITUTE OF THEOLOGIANS</b>",
+        ParagraphStyle(
+            "inst_name",
+            fontSize=12,
+            alignment=TA_CENTER,
+            spaceAfter=4,
+            fontName="Helvetica-Bold"
+        )
+    ))
+    
+    # --- ADDRESS & CONTACT ---
+    content.append(Paragraph(
+        "No. 37, 32nd Lane Colombo 06.<br/>"
+        "Tel: +94 11 236 1793 / +94 77 736 5964",
+        ParagraphStyle(
+            "contact",
+            fontSize=9,
+            alignment=TA_CENTER,
+            spaceAfter=4
+        )
+    ))
+    
+    # --- REGISTRATION NUMBER ---
+    content.append(Paragraph(
+        "Reg. No R/2552/C/238 (MRCA)",
+        ParagraphStyle(
+            "reg",
+            fontSize=8,
+            alignment=TA_CENTER,
+            spaceAfter=10
+        )
+    ))
+    
+    # --- TITLE ---
+    content.append(Paragraph(
+        "New Admission Applicant Profile",
+        ParagraphStyle(
+            "title",
+            fontSize=13,
+            alignment=TA_CENTER,
+            fontName="Helvetica-Bold",
+            spaceAfter=12
+        )
+    ))
 
     rows = [
         ("Full Name", data["full_name"]),
