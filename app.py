@@ -85,7 +85,7 @@ def create_pdf_profile(data):
         alignment=TA_CENTER,
         textColor=colors.HexColor("#0a7a3b"),
         spaceAfter=10,
-        fontName="Helvetica-Bold"
+        fontName="Helvetica"
     )
 
     label_style = ParagraphStyle(
