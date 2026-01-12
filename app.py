@@ -111,6 +111,7 @@ def create_pdf_profile(data):
     right_header = Paragraph(
         """
         <para align="right">
+        
         No. 37, 32nd Lane Colombo 06.<br/>
         Tel: +94 11 236 1793 / +94 77 736 5964<br/>
         Reg. No R/2552/C/238 (MRCA)
@@ -120,8 +121,7 @@ def create_pdf_profile(data):
             "right_header",
             fontSize=11,
             fontName="Helvetica",
-            leading=14,
-            spaceBefore=10
+            leading=14
         )
     )
     
