@@ -212,7 +212,7 @@ with st.sidebar:
                     fields = pasted_data.strip().split('\t')
                     
                     # Check if we have enough fields (should be 26)
-                    if len(fields) >= 26:
+                    if len(fields) >= 27:
                         # Map to our form fields
                         data = {
                             'timestamp': fields[0],
