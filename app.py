@@ -105,52 +105,53 @@ def create_pdf_profile(data):
 
     content = []
 
-        # ---------- HEADER (LOGO LEFT, TEXT RIGHT) ----------
-        logo = Image("assets/logo.jpg", width=65, height=65)
-        
-        right_header = Paragraph(
-            """
-            <para align="right">
-            No. 37, 32nd Lane Colombo 06.<br/>
-            Tel: +94 11 236 1793 / +94 77 736 5964<br/>
-            Reg. No R/2552/C/238 (MRCA)
-            </para>
-            """,
-            ParagraphStyle(
-                "right_header",
-                fontSize=9,
-                leading=12
-            )
+    # ---------- HEADER (LOGO LEFT, TEXT RIGHT) ----------
+    logo = Image("assets/logo.jpg", width=65, height=65)
+    
+    right_header = Paragraph(
+        """
+        <para align="right">
+        No. 37, 32nd Lane Colombo 06.<br/>
+        Tel: +94 11 236 1793 / +94 77 736 5964<br/>
+        Reg. No R/2552/C/238 (MRCA)
+        </para>
+        """,
+        ParagraphStyle(
+            "right_header",
+            fontSize=9,
+            leading=12
         )
+    )
+    
+    header_table = Table(
+        [[logo, right_header]],
+        colWidths=[1.2 * inch, 4.8 * inch]
+    )
+    
+    header_table.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 0),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+    ]))
+    
+    content.append(header_table)
+    content.append(Spacer(1, 14))
+
         
-        header_table = Table(
-            [[logo, right_header]],
-            colWidths=[1.2 * inch, 4.8 * inch]
+        
+    content.append(Paragraph(
+        "New Admission Applicant Profile",
+        ParagraphStyle(
+            "green_title",
+            fontSize=14,
+            alignment=TA_CENTER,
+            fontName="Helvetica-Bold",
+            textColor=colors.HexColor("#0a7a3b"),
+            spaceAfter=12
         )
-        
-        header_table.setStyle(TableStyle([
-            ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-            ("LEFTPADDING", (0, 0), (-1, -1), 0),
-            ("RIGHTPADDING", (0, 0), (-1, -1), 0),
-            ("TOPPADDING", (0, 0), (-1, -1), 0),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
-        ]))
-        
-        content.append(header_table)
-        content.append(Spacer(1, 14))
-        
-        
-        content.append(Paragraph(
-            "New Admission Applicant Profile",
-            ParagraphStyle(
-                "green_title",
-                fontSize=14,
-                alignment=TA_CENTER,
-                fontName="Helvetica-Bold",
-                textColor=colors.HexColor("#0a7a3b"),
-                spaceAfter=12
-            )
-        ))
+    ))
 
     rows = [
         ("Full Name", data["full_name"]),
