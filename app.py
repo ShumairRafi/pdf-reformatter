@@ -144,11 +144,12 @@ def create_pdf_profile(data):
         for label, value in rows
     ]
 
-    table = Table(
-        table_data,
-        colWidths=[2.7 * inch, 3.8 * inch],
-        rowHeights=[18] * len(table_data)
-    )
+            table = Table(
+                table_data,
+                colWidths=[2.7 * inch, 3.8 * inch],
+                repeatRows=0  # optional but safe
+            )
+
 
     table.setStyle(TableStyle([
         # Grid
