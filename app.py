@@ -135,7 +135,7 @@ def create_pdf_profile(data):
         ("TOPPADDING", (0, 0), (-1, -1), 0),
         ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
     ]))
-    content.append(Spacer(1, 15))   # SPACE ABOVE LOGO
+    content.append(Spacer(1, 25))   # SPACE ABOVE LOGO
     
     content.append(header_table)
     content.append(Spacer(1, 40))
