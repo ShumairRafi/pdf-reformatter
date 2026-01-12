@@ -80,21 +80,20 @@ def create_pdf_profile(data):
         fontName="Helvetica-Bold"
     )
 
-    label_style = ParagraphStyle(
-        "label",
-        fontSize=9,
-        fontName="Helvetica-Bold",
-        leftIndent=4
-    )
-
-    value_style = ParagraphStyle(
-        "value",
-        fontSize=9,
-        fontName="Helvetica",
-        leftIndent=4,
-        leading=12,
-        wordWrap="CJK"
-    )
+        label_style = ParagraphStyle(
+            "label",
+            fontSize=9,
+            fontName="Helvetica-Bold",
+            leading=11
+        )
+        
+        value_style = ParagraphStyle(
+            "value",
+            fontSize=9,
+            fontName="Helvetica",
+            leading=11,          # smaller line height
+            wordWrap="CJK"
+        )
 
     content = []
 
